@@ -1,6 +1,6 @@
 Hotel bookings - factors
 ================
-Mine Çetinkaya-Rundel
+Fatimah Albrahim
 
 ``` r
 library(tidyverse)
@@ -27,23 +27,28 @@ inspiration and help.
 
 ``` r
 hotels %>%
+
+  mutate(arrival_date_month = fct_relevel(arrival_date_month, month.name))  %>%
   group_by(hotel, arrival_date_month) %>%   # group by hotel type and arrival month
   summarise(mean_adr = mean(adr)) %>%       # calculate mean adr for each group
   ggplot(aes(
     x = arrival_date_month,                 # x-axis = arrival_date_month
-    y = mean_adr,                           # y-axis = mean_adr calculated above
+    y = mean_adr,  
+    # y-axis = mean_adr calculated above
     group = hotel,                          # group lines by hotel type
     color = hotel)                          # and color by hotel type
     ) +
   geom_line() +                             # use lines to represent data
+   scale_y_continuous(labels=scales::dollar_format())+
   theme_minimal() +                         # use a minimal theme
-  labs(x = "Arrival month",                 # customize labels
+  labs(x = "Arrival month",    
+       # customize labels
        y = "Mean ADR (average daily rate)",
        title = "Comparison of resort and city hotel prices across months",
        subtitle = "Resort hotel prices soar in the summer while ciry hotel prices remain relatively constant throughout the year",
        color = "Hotel type")
 ```
 
-    ## `summarise()` regrouping output by 'hotel' (override with `.groups` argument)
+    ## `summarise()` has grouped output by 'hotel'. You can override using the `.groups` argument.
 
 ![](hotels-forcats_files/figure-gfm/plot-1.png)<!-- -->
